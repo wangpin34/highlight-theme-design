@@ -1,29 +1,115 @@
 import { CaretDownIcon } from '@radix-ui/react-icons'
-import { Box, Button, Dialog, DropdownMenu, Flex, Text, TextField } from '@radix-ui/themes'
+import { Box, Button, DropdownMenu } from '@radix-ui/themes'
+import * as htmlToImage from 'html-to-image'
+import { useRecoilValue } from 'recoil'
+import { themeState } from 'states/theme'
+import { Theme } from 'types/theme'
+
+function getFrame() {
+  return document.querySelector('#code-frame') as HTMLElement
+}
+
+function SavePNG() {
+  const editor = getFrame()
+  if (!editor) return
+  htmlToImage
+    .toPng(editor as HTMLElement)
+    .then(function (dataUrl) {
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = `highlight-design.png`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    })
+    .catch(function (error) {
+      console.error('oops, something went wrong!', error)
+    })
+}
+
+function SaveSVG() {
+  const editor = getFrame()
+  if (!editor) return
+  htmlToImage
+    .toSvg(editor as HTMLElement)
+    .then(function (dataUrl) {
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = `highlight-design.svg`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    })
+    .catch(function (error) {
+      console.error('oops, something went wrong!', error)
+    })
+}
+
+function downloadText(filename: string, text: string) {
+  const element = document.createElement('a')
+  const blob = new Blob([text], { type: 'text/plain' })
+  const url = URL.createObjectURL(blob)
+  element.href = url
+  element.download = filename
+  element.click()
+  URL.revokeObjectURL(url)
+}
+
+function dowloadThemeAsJSON(theme: Theme) {
+  downloadText(
+    'theme.json',
+    JSON.stringify(
+      {
+        backgroundColor: theme.backgroundColor,
+        color: theme.color,
+        items: Array.from(theme.items.values()),
+      },
+      null,
+      2
+    )
+  )
+}
+
+function dowloadThemeAsHighlightCSS(theme: Theme) {
+  downloadText(
+    'highlight-theme.css',
+    `.hljs {
+  background-color: ${theme.backgroundColor};
+  color: ${theme.color};
+}
+${Array.from(theme.items.values())
+  .map((item) => {
+    return `
+.hljs-${item.category} {
+  color: ${item.color};
+}
+  `
+  })
+  .join('\n')}
+    `
+  )
+}
+
 export default function Header() {
+  const theme = useRecoilValue(themeState)
   return (
     <>
-      <header className="bg-slate-200">
+      <header className="w-full fixed top-0">
         <Box>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <Button variant="soft">
-                Code
+                New
                 <CaretDownIcon />
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
-              <DropdownMenu.Item>New</DropdownMenu.Item>
-              <DropdownMenu.Item>Use snippets</DropdownMenu.Item>
-              <DropdownMenu.Separator />
-
+              <DropdownMenu.Item>New Blank</DropdownMenu.Item>
               <DropdownMenu.Sub>
-                <DropdownMenu.SubTrigger>Load code from</DropdownMenu.SubTrigger>
+                <DropdownMenu.SubTrigger>Load</DropdownMenu.SubTrigger>
                 <DropdownMenu.SubContent>
-                  <DropdownMenu.Item>From local</DropdownMenu.Item>
-                  <DropdownMenu.Item>From cache</DropdownMenu.Item>
-                  <DropdownMenu.Separator />
-                  <DropdownMenu.Item>From remote</DropdownMenu.Item>
+                  <DropdownMenu.Item>From JSON</DropdownMenu.Item>
+                  <DropdownMenu.Item>From Local</DropdownMenu.Item>
                 </DropdownMenu.SubContent>
               </DropdownMenu.Sub>
             </DropdownMenu.Content>
@@ -31,17 +117,22 @@ export default function Header() {
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <Button variant="soft">
-                Options
+                Export
                 <CaretDownIcon />
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
-              <DropdownMenu.Item>Highlight(dark/light)</DropdownMenu.Item>
-              <DropdownMenu.Item>Preview</DropdownMenu.Item>
-              <DropdownMenu.Separator />
+              <DropdownMenu.Item onSelect={() => dowloadThemeAsJSON(theme)}>JSON</DropdownMenu.Item>
+              <DropdownMenu.Item onSelect={() => dowloadThemeAsHighlightCSS(theme)}>CSS(highlight.js)</DropdownMenu.Item>
+              <DropdownMenu.Sub>
+                <DropdownMenu.SubTrigger>Code Image</DropdownMenu.SubTrigger>
+                <DropdownMenu.SubContent>
+                  <DropdownMenu.Item onSelect={SavePNG}>Export as PNG</DropdownMenu.Item>
+                  <DropdownMenu.Item onSelect={SaveSVG}>Export as SVG</DropdownMenu.Item>
+                </DropdownMenu.SubContent>
+              </DropdownMenu.Sub>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
-          <Button variant="soft">Export</Button>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <Button variant="soft">
@@ -57,45 +148,6 @@ export default function Header() {
           </DropdownMenu.Root>
         </Box>
       </header>
-
-      <Dialog.Root>
-        <Dialog.Trigger>
-          <Button>Edit profile</Button>
-        </Dialog.Trigger>
-
-        <Dialog.Content style={{ maxWidth: 450 }}>
-          <Dialog.Title>Edit profile</Dialog.Title>
-          <Dialog.Description size="2" mb="4">
-            Make changes to your profile.
-          </Dialog.Description>
-
-          <Flex direction="column" gap="3">
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Name
-              </Text>
-              <TextField.Input defaultValue="Freja Johnsen" placeholder="Enter your full name" />
-            </label>
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Email
-              </Text>
-              <TextField.Input defaultValue="freja@example.com" placeholder="Enter your email" />
-            </label>
-          </Flex>
-
-          <Flex gap="3" mt="4" justify="end">
-            <Dialog.Close>
-              <Button variant="soft" color="gray">
-                Cancel
-              </Button>
-            </Dialog.Close>
-            <Dialog.Close>
-              <Button>Save</Button>
-            </Dialog.Close>
-          </Flex>
-        </Dialog.Content>
-      </Dialog.Root>
     </>
   )
 }

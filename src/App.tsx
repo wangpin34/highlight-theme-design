@@ -1,7 +1,6 @@
 import { Theme } from '@radix-ui/themes'
-import CSSEditor from 'components/css-editor'
+import Design from 'components/design'
 import Header from 'components/header'
-import Previewer from 'components/previewer'
 import { RecoilRoot } from 'recoil'
 import './App.css'
 
@@ -9,15 +8,10 @@ function App() {
   return (
     <Theme>
       <RecoilRoot>
-        <div className="h-screen max-h-screen bg-slate-50">
+        <div className="min-w-[950px] h-screen max-h-screen">
           <Header />
-          <div className="h-screen max-h-screen pt-[68px] xl:container mx-auto  grid grid-cols-2 gap-2">
-            <div className="max-h-full overflow-auto" id="editor-container">
-              <CSSEditor />
-            </div>
-            <div className="max-h-full overflow-auto" id="preview-container">
-              <Previewer />
-            </div>
+          <div className="h-full pt-[32px] mx-auto bg-slate-50">
+            <Design />
           </div>
         </div>
       </RecoilRoot>
