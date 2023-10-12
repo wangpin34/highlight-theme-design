@@ -1,4 +1,3 @@
-import { Box, Strong, Text } from '@radix-ui/themes'
 import ColorPicker from 'components/color-picker'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
@@ -19,22 +18,22 @@ export default function BaseDesign() {
     }
   }, [showColorPicker])
   return (
-    <Box>
+    <div>
       <div className="px-2 py-4 border-b-2 border-solid border-slate-200">
-        <Text size="3">
-          <Strong>Page</Strong>
-        </Text>
+        <span>
+          <strong>Page</strong>
+        </span>
       </div>
       <div className="px-2 pt-2">
         <div className="flex gap-2 items-center">
           <ColorPicker color={base.color} onChange={(color) => setBase({ ...base, color })} />
-          <Text size="1">Color</Text>
+          <span>Color</span>
         </div>
         <div className="flex gap-2 items-center">
           <ColorPicker color={base.backgroundColor} onChange={(backgroundColor) => setBase({ ...base, backgroundColor })} />
-          <Text size="1">Background Color</Text>
+          <span>Background Color</span>
         </div>
       </div>
-    </Box>
+    </div>
   )
 }

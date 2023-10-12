@@ -1,7 +1,7 @@
 import classnames from 'classnames'
 import hljs from 'highlight.js'
 import { darken, lighten } from 'polished'
-import React, { ComponentType, useMemo, useState, useLayoutEffect, useCallback, useRef, useEffect } from 'react'
+import React, { ComponentType, useMemo, useState, useLayoutEffect, useCallback, useRef } from 'react'
 import * as prod from 'react/jsx-runtime'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import rehypeParse from 'rehype-parse'
