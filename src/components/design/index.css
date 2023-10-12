@@ -1,0 +1,45 @@
+.container * {
+  font-family:
+    JetBrains Mono,
+    monospace;
+  font-variant-ligatures: none;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  -moz-tab-size: 2;
+  -o-tab-size: 2;
+  tab-size: 2;
+  white-space: pre-wrap;
+}
+
+.editor {
+  display: grid;
+  width: 100%;
+  grid-template: 1fr/1fr;
+}
+
+.editor .editor-formatted {
+  grid-column: 1/1;
+  grid-row: 1/1;
+  margin: 0;
+}
+
+.editor textarea:focus {
+  outline: none;
+}
+
+.editor textarea {
+  z-index: 2;
+  border: none;
+  background: transparent;
+  caret-color: currentColor;
+  resize: none;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  text-size-adjust: none;
+  margin: 0;
+  grid-column: 1/1;
+  grid-row: 1/1;
+  overflow: hidden;
+  box-sizing: border-box;
+}

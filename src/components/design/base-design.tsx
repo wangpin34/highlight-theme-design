@@ -22,7 +22,7 @@ export default function BaseDesign() {
     <Box>
       <div className="px-2 py-4 border-b-2 border-solid border-slate-200">
         <Text size="3">
-          <Strong>Base Properties</Strong>
+          <Strong>Page</Strong>
         </Text>
       </div>
       <div className="px-2 pt-2">
@@ -32,7 +32,7 @@ export default function BaseDesign() {
         </div>
         <div className="flex gap-2 items-center">
           <ColorPicker color={base.backgroundColor} onChange={(backgroundColor) => setBase({ ...base, backgroundColor })} />
-          <Text size="1">Background</Text>
+          <Text size="1">Background Color</Text>
         </div>
       </div>
     </Box>

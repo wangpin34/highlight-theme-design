@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { TwitterPicker } from 'react-color'
+import { useState, useRef } from 'react'
+import { SketchPicker } from 'react-color'
 
 interface Props {
   color: string
@@ -7,49 +7,36 @@ interface Props {
 }
 
 export default function ColorPicker({ color, onChange }: Props) {
+  const ref = useRef<HTMLDivElement>(null)
   const [show, setShow] = useState<boolean>(false)
-  useEffect(() => {
-    const listener = () => {
-      console.log('hide from doc')
-      setShow(false)
-    }
-    if (show) {
-      document.body.addEventListener('click', listener, { once: true })
-      return () => {
-        document.body.removeEventListener('click', listener)
-      }
-    }
-  }, [show])
   return (
-    <div
-      style={{ backgroundColor: color }}
-      onClick={(e: React.MouseEvent) => {
-        e.stopPropagation()
-        setShow(true)
-      }}
-      className={`w-[20px] h-[20px] relative rounded border-2 border-slate-200 border-solid cursor-pointer`}
-    >
+    <div>
+      <div
+        style={{ backgroundColor: color }}
+        onClick={() => {
+          setShow(true)
+        }}
+        className={`w-[20px] h-[20px] relative rounded border-2 border-slate-200 border-solid cursor-pointer`}
+        ref={ref}
+      ></div>
       {show ? (
-        <TwitterPicker
-          onChange={(_, e) => {
-            e.stopPropagation()
-          }}
-          onChangeComplete={(color, e) => {
-            e.stopPropagation()
-            onChange(color.hex)
-            console.log('onchange completed')
-          }}
-          styles={{
-            default: {
-              card: {
-                zIndex: 10,
-                position: 'absolute',
-                top: '30px',
-                left: '-10px',
-              },
-            },
-          }}
-        />
+        <div style={{ position: 'relative', zIndex: 2 }} className="popover">
+          <div
+            className="mask"
+            style={{ position: 'fixed', top: 0, right: 0, left: 0, bottom: 0 }}
+            onClick={() => {
+              setShow(false)
+            }}
+          ></div>
+          <div style={{ position: 'absolute', right: 40 }}>
+            <SketchPicker
+              color={color}
+              onChangeComplete={(color) => {
+                onChange(color.hex)
+              }}
+            />
+          </div>
+        </div>
       ) : null}
     </div>
   )

@@ -1,5 +1,6 @@
 export interface Item {
   category: string
+  language?: string
   color: string
 }
 
