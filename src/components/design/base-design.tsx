@@ -31,7 +31,7 @@ export default function BaseDesign() {
         </div>
         <div className="flex gap-2 items-center">
           <ColorPicker color={base.backgroundColor} onChange={(backgroundColor) => setBase({ ...base, backgroundColor })} />
-          <span>Background Color</span>
+          <span>Background</span>
         </div>
       </div>
     </div>

@@ -6,3 +6,10 @@ html,
 body {
   height: 100%;
 }
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src:
+    local("JetBrains Mono"),
+    url("/JetBrainsMono-Medium.woff2") format("woff2");
+}

@@ -1,9 +1,9 @@
 import classnames from 'classnames'
 import hljs from 'highlight.js'
 import { darken, lighten } from 'polished'
-import React, { ComponentType, useMemo, useState, useLayoutEffect, useCallback, useRef } from 'react'
+import React, { ComponentType, useMemo, useLayoutEffect, useCallback, useRef } from 'react'
 import * as prod from 'react/jsx-runtime'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue, useRecoilState, useRecoilCallback, useSetRecoilState } from 'recoil'
 import rehypeParse from 'rehype-parse'
 import rehypeReact from 'rehype-react'
 import { currentItemKeyState, themeState } from 'states/theme'
@@ -11,7 +11,10 @@ import { codeState } from 'states/code'
 import { unified } from 'unified'
 import BaseDesign from './base-design'
 import ItemDesign from './item-design'
+import { MaterialSymbolsCheckCircleOutline } from 'components/icons/material'
+import { isEditModeState, modeState, Mode } from 'states/action'
 import './index.css'
+import Dock from './dock'
 
 function Span({ children, className }: { children: React.ReactNode; className?: string }) {
   const [, setCurrentItemKey] = useRecoilState(currentItemKeyState)
@@ -55,7 +58,7 @@ function Span({ children, className }: { children: React.ReactNode; className?: 
       <span
         className={classnames(
           className,
-          'hover:outline-1 hover:outline-pink-600 hover:outline-dashed hover:outline-offset-2 cursor-pointer rounded'
+          'hover:outline-2 hover:outline-pink-600 hover:outline-dashed hover:outline-offset-2 cursor-pointer rounded-md'
         )}
         data-category={category}
         onClick={(e) => {
@@ -95,30 +98,17 @@ const processor = unified()
     }
   )
 
-export function MaterialSymbolsEditSquareOutline(props: { color: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" {...props}>
-      <path
-        fill="currentColor"
-        d="M5 23.7q-.825 0-1.413-.587T3 21.7v-14q0-.825.588-1.413T5 5.7h8.925l-2 2H5v14h14v-6.95l2-2v8.95q0 .825-.588 1.413T19 23.7H5Zm7-9Zm4.175-8.425l1.425 1.4l-6.6 6.6V15.7h1.4l6.625-6.625l1.425 1.4l-7.2 7.225H9v-4.25l7.175-7.175Zm4.275 4.2l-4.275-4.2l2.5-2.5q.6-.6 1.438-.6t1.412.6l1.4 1.425q.575.575.575 1.4T22.925 8l-2.475 2.475Z"
-      ></path>
-    </svg>
-  )
-}
-
-export function MaterialSymbolsCheckCircleOutline(props: { color: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" {...props}>
-      <path
-        fill="currentColor"
-        d="m10.6 16.6l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4l4.25 4.25ZM12 22q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22Zm0-2q3.35 0 5.675-2.325T20 12q0-3.35-2.325-5.675T12 4Q8.65 4 6.325 6.325T4 12q0 3.35 2.325 5.675T12 20Zm0-8Z"
-      ></path>
-    </svg>
-  )
-}
-
 export default function Previewer() {
-  const [editMode, setEditMode] = useState<boolean>(false)
+  const isEditMode = useRecoilValue(isEditModeState)
+  const setMode = useSetRecoilState(modeState)
+  const onToggleMode = useRecoilCallback(({snapshot}) => async () => {
+    const current = snapshot.getLoadable(modeState).getValue()
+    if (current === Mode.Design) {
+      setMode(Mode.Edit)
+    } else {
+      setMode(Mode.Design)
+    }
+  }, [])
   const theme = useRecoilValue(themeState)
   const [code, setCode] = useRecoilState(codeState)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -167,14 +157,14 @@ export default function Previewer() {
   }, [])
   const frameStyle = {
     backgroundColor: theme.backgroundColor,
-    boxShadow: `0 0 4px 1px ${editMode ? 'blue' : lighten(0.4, theme.backgroundColor)}`,
+    boxShadow: `0 0 4px 1px ${isEditMode ? 'blue' : lighten(0.4, theme.backgroundColor)}`,
   }
 
   useLayoutEffect(() => {
-    if (editMode) {
+    if (isEditMode) {
       textareaRef.current?.focus()
     }
-  }, [editMode])
+  }, [isEditMode])
 
   return (
     <>
@@ -183,20 +173,16 @@ export default function Previewer() {
           <style>{css}</style>
           <div className="designer-container">
             <div className="tool-bar flex justify-end">
-              {editMode ? (
+              
                 <>
-                  <button onClick={() => setEditMode(false)}>
+                  <button onClick={onToggleMode} style={{opacity: isEditMode ? 1 : 0}}>
                     <MaterialSymbolsCheckCircleOutline color={theme.color} />
                   </button>
                 </>
-              ) : (
-                <button onClick={() => setEditMode(true)}>
-                  <MaterialSymbolsEditSquareOutline color={theme.color} />
-                </button>
-              )}
+              
             </div>
             <div className="rounded-xl min-w-[320px] p-[20px]" style={frameStyle as React.CSSProperties}>
-              {!editMode ? (
+              {!isEditMode ? (
                 <pre data-language={code.language}>
                   <div className="hljs code-frame text-[14px] leading-normal">{codeChildren}</div>
                 </pre>
@@ -211,7 +197,7 @@ export default function Previewer() {
                     autoCorrect="off"
                     spellCheck="false"
                     autoCapitalize="off"
-                    className={classnames('text-[14px] leading-normal', { 'pointer-events-none': !editMode })}
+                    className={classnames('text-[14px] leading-normal', { 'pointer-events-none': !isEditMode })}
                     onChange={(e) => setCode((current) => ({ ...current, value: e.target.value, language: 'auto' }))}
                     onInput={(e) => onInput(e)}
                   />
@@ -226,12 +212,14 @@ export default function Previewer() {
       <aside
         className="fixed top-0 right-0 w-[200px] h-full border-l-2 border-slate-200 border-solid bg-white"
         onClick={(e) => {
-          setEditMode(false)
+          onToggleMode()
           e.stopPropagation()
         }}
       >
         {currentItemKey ? <ItemDesign /> : <BaseDesign />}
       </aside>
+
+      <Dock />
     </>
   )
 }
