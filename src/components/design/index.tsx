@@ -181,7 +181,7 @@ export default function Previewer() {
       <div className="w-full pr-[200px] h-full overflow-auto" style={{ backgroundColor: darken(0.2, theme.backgroundColor) }}>
         <div className="w-full h-full flex justify-center items-center min-w-min px-[40px]" data-current-item-key={currentItemKey}>
           <style>{css}</style>
-          <div className="container">
+          <div className="designer-container">
             <div className="tool-bar flex justify-end">
               {editMode ? (
                 <>
