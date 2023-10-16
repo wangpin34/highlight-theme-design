@@ -1,34 +1,16 @@
 import classnames from 'classnames'
 import hljs from 'highlight.js'
-import { darken, lighten } from 'polished'
+import { lighten } from 'polished'
 import React, { useMemo, useLayoutEffect, useCallback, useRef } from 'react'
-import { useRecoilValue, useRecoilState, useRecoilCallback, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useRecoilState } from 'recoil'
 import { currentItemKeyState, themeState } from 'states/theme'
 import { codeState } from 'states/code'
-import { designPreferencesState } from 'states/design-preferences'
-import ItemDesign from '../item-design'
-import { MaterialSymbolsCheckCircleOutline } from 'components/icons/material'
-import { isEditModeState, modeState, Mode } from 'states/action'
+import { isEditModeState } from 'states/action'
 import './index.css'
-import Dock from '../dock'
 import useCodeChildren from './useCodeChildren'
 
 export default function Previewer() {
-  const preferences = useRecoilValue(designPreferencesState)
   const isEditMode = useRecoilValue(isEditModeState)
-  const setMode = useSetRecoilState(modeState)
-  const onToggleMode = useRecoilCallback(
-    ({ snapshot }) =>
-      async () => {
-        const current = snapshot.getLoadable(modeState).getValue()
-        if (current === Mode.Design) {
-          setMode(Mode.Edit)
-        } else {
-          setMode(Mode.Design)
-        }
-      },
-    []
-  )
   const theme = useRecoilValue(themeState)
   const [code, setCode] = useRecoilState(codeState)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -86,7 +68,6 @@ export default function Previewer() {
     }
   }, [isEditMode])
 
-  const codeFrameRef = useRef<HTMLDivElement>(null)
 
   return (
         <div className="h-full flex items-center">

@@ -6,7 +6,7 @@ import { themeState } from 'states/theme'
 import { useCallback} from 'react'
 import { modeState, Mode } from 'states/action'
 import { designPreferencesState } from 'states/design-preferences'
-import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilCallback, useRecoilState } from 'recoil'
 
 export default function Dock() {
   const [theme, setTheme] = useRecoilState(themeState)

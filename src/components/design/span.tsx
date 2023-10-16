@@ -1,20 +1,8 @@
 import classnames from 'classnames'
-import hljs from 'highlight.js'
-import { darken, lighten } from 'polished'
-import React, { ComponentType, useMemo, useLayoutEffect, useCallback, useRef } from 'react'
-import * as prod from 'react/jsx-runtime'
-import { useRecoilValue, useRecoilState, useRecoilCallback, useSetRecoilState } from 'recoil'
-import rehypeParse from 'rehype-parse'
-import rehypeReact from 'rehype-react'
-import { currentItemKeyState, themeState } from 'states/theme'
-import { codeState } from 'states/code'
-import { unified } from 'unified'
-import { designPreferencesState } from 'states/design-preferences'
-import ItemDesign from '../item-design'
-import { MaterialSymbolsCheckCircleOutline } from 'components/icons/material'
-import { isEditModeState, modeState, Mode } from 'states/action'
+import React, { useMemo } from 'react'
+import { useRecoilState} from 'recoil'
+import { currentItemKeyState } from 'states/theme'
 import './index.css'
-import Dock from '../dock'
 
 function Span({ children, className }: { children: React.ReactNode; className?: string }) {
   const [, setCurrentItemKey] = useRecoilState(currentItemKeyState)

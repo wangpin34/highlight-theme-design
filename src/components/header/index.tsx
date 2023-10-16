@@ -1,5 +1,4 @@
 import { Text, Flex} from '@radix-ui/themes'
-import githubWhite from './github-mark-white.svg'
 import logo from 'assets/logo.svg'
 import github from './github-mark.svg'
 

@@ -1,4 +1,3 @@
-import Design from 'components/design'
 import { RecoilRoot } from 'recoil'
 import './App.css'
 import { Theme } from '@radix-ui/themes';
