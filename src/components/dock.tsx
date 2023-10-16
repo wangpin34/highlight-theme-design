@@ -31,8 +31,8 @@ export default function Dock() {
     const theme = snapshot.getLoadable(themeState).getValue()
     downloadText(JSON.stringify(theme, null, 2), {filename: 'code-theme.json', type: 'text/json'})
   }, [])
-  return <div className="fixed bottom-8 w-full flex justify-center">
-    <div className="w-min-fit p-4 flex gap-4 justify-center items-center bg-slate-100 rounded-xl shadow-xl ">
+  return <div className="fixed bottom-2 w-full flex justify-center">
+    <div className="min-w-[400px] p-4 flex gap-4 justify-center items-center bg-slate-100 rounded-xl shadow-2xl ">
     <div id="theme-root-properties" className="flex flex-col justify-center h-full w-min-fit p-2 rounded-lg shadow-md bg-slate-50">
       <Flex >
         <ColorPicker color={theme.color} onChange={(color) => setThemeFontColor(color)} />
