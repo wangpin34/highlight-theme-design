@@ -37,6 +37,7 @@
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   text-size-adjust: none;
+  font-size: var(--code-font-size);
   margin: 0;
   grid-column: 1/1;
   grid-row: 1/1;
