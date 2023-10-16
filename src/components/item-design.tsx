@@ -1,5 +1,5 @@
 import ColorPicker from 'components/color-picker'
-import { Text } from '@radix-ui/themes'
+import { Text, Box } from '@radix-ui/themes'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { currentItemState } from 'states/theme'
@@ -20,18 +20,18 @@ export default function ItemDesign() {
     }
   }, [showColorPicker])
   return item ? (
-    <div className="h-screen flex justify-center items-center" onClick={(e) => e.stopPropagation()}>
-      <div className="min-w-min min-h-min p-2 bg-slate-100 rounded-md">
-      <div className={classnames('px-2 py-4 border-b-2 border-solid border-slate-200')}>
+    <Box className="flex justify-center items-center" onClick={(e) => e.stopPropagation()}>
+      <Box className="min-w-min min-h-min p-2 rounded-md shadow-2xl">
+      <Box className={classnames('px-2 py-4 border-b-2 border-solid border-slate-200')}>
         <Text className="capitalize" size="3">
           {item.category}
         </Text>
-      </div>
-      <div className="flex pt-2 gap-2 items-center px-2">
+      </Box>
+      <Box className="flex pt-2 gap-2 items-center px-2">
         <ColorPicker color={item.color} onChange={(color) => setItem({ ...item, color })} />
         <Text className="capitalize" size="2">Color</Text>
-      </div>
-      </div>
-    </div>
+      </Box>
+      </Box>
+    </Box>
   ) : null
 }

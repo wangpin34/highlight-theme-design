@@ -1,5 +1,5 @@
 
-import { Text, Switch, Flex, TextField, DropdownMenu, Button} from '@radix-ui/themes'
+import { Text, Box, Switch, Flex, TextField, DropdownMenu, Button} from '@radix-ui/themes'
 import ColorPicker from 'components/color-picker'
 import { downloadHljs, downloadText } from 'utils/download'
 import { themeState } from 'states/theme'
@@ -31,9 +31,9 @@ export default function Dock() {
     const theme = snapshot.getLoadable(themeState).getValue()
     downloadText(JSON.stringify(theme, null, 2), {filename: 'code-theme.json', type: 'text/json'})
   }, [])
-  return <div className="fixed bottom-2 w-full flex justify-center">
-    <div className="min-w-[400px] p-4 flex gap-4 justify-center items-center bg-slate-100 rounded-xl shadow-2xl ">
-    <div id="theme-root-properties" className="flex flex-col justify-center h-full w-min-fit p-2 rounded-lg shadow-md bg-slate-50">
+  return <Box className="fixed bottom-2 w-full flex justify-center">
+    <Box className="min-w-[400px] p-4 flex gap-4 justify-center items-center bg-slate-100 rounded-xl shadow-2xl ">
+    <Box id="theme-root-properties" className="flex flex-col justify-center h-full w-min-fit p-2 rounded-lg shadow-md bg-slate-50">
       <Flex gap="2">
         <ColorPicker color={theme.color} onChange={(color) => setThemeFontColor(color)} />
         <Text size="2">Font Color</Text>
@@ -42,8 +42,8 @@ export default function Dock() {
         <ColorPicker color={theme.backgroundColor} onChange={(color) => setThemeBgColor(color)} />
         <Text size="2">Background</Text>
       </Flex>
-      </div>
-      <div id="preview-preferences" className="h-full w-[150px] grid grid-rows-2 p-2 rounded-lg shadow-md bg-slate-50">
+      </Box>
+      <Box id="preview-preferences" className="h-full w-[150px] grid grid-rows-2 p-2 rounded-lg shadow-md bg-slate-50">
         <Text as="label" size="2">
           <Flex gap="2">
             <Switch defaultChecked  checked={mode === Mode.Edit} onClick={() => onToggle()}/> Edit Mode
@@ -71,8 +71,8 @@ export default function Dock() {
             </button>
           </Flex>
         </Text>
-      </div>
-      <div id="actions" className="w-min-fit h-full p-2 rounded-lg shadow-md bg-slate-50">
+      </Box>
+      <Box id="actions" className="w-min-fit h-full p-2 rounded-lg shadow-md bg-slate-50">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant='surface'>Export</Button>
@@ -86,7 +86,7 @@ export default function Dock() {
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-      </div>
-  </div>
-  </div>
+      </Box>
+  </Box>
+  </Box>
 }

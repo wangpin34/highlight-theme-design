@@ -68,10 +68,9 @@ export default function Previewer() {
     }
   }, [isEditMode])
 
-
   return (
-        <div className="h-full flex items-center">
-          <div className="overflow-auto rounded-xl p-8 h-max-content">
+
+          <div className="overflow-auto rounded-xl h-max-content">
             <div
               className="w-min-content h-min-content flex justify-center items-center min-w-min"
               data-current-item-key={currentItemKey}
@@ -105,6 +104,6 @@ export default function Previewer() {
               </div>
             </div>
           </div>
-        </div>
+        
   )
 }
