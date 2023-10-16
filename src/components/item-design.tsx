@@ -1,4 +1,5 @@
 import ColorPicker from 'components/color-picker'
+import { Text } from '@radix-ui/themes'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { currentItemState } from 'states/theme'
@@ -22,13 +23,13 @@ export default function ItemDesign() {
     <div className="h-screen flex justify-center items-center" onClick={(e) => e.stopPropagation()}>
       <div className="min-w-min min-h-min p-2 bg-slate-100 rounded-md">
       <div className={classnames('px-2 py-4 border-b-2 border-solid border-slate-200')}>
-        <span>
-          <strong className="capitalize">{item.category}</strong>
-        </span>
+        <Text className="capitalize" size="3">
+          {item.category}
+        </Text>
       </div>
       <div className="flex pt-2 gap-2 items-center px-2">
         <ColorPicker color={item.color} onChange={(color) => setItem({ ...item, color })} />
-        <span>Color</span>
+        <Text className="capitalize" size="2">Color</Text>
       </div>
       </div>
     </div>

@@ -34,13 +34,13 @@ export default function Dock() {
   return <div className="fixed bottom-2 w-full flex justify-center">
     <div className="min-w-[400px] p-4 flex gap-4 justify-center items-center bg-slate-100 rounded-xl shadow-2xl ">
     <div id="theme-root-properties" className="flex flex-col justify-center h-full w-min-fit p-2 rounded-lg shadow-md bg-slate-50">
-      <Flex >
+      <Flex gap="2">
         <ColorPicker color={theme.color} onChange={(color) => setThemeFontColor(color)} />
-        <span>Font Color</span>
+        <Text size="2">Font Color</Text>
       </Flex>
-      <Flex>
+      <Flex gap="2">
         <ColorPicker color={theme.backgroundColor} onChange={(color) => setThemeBgColor(color)} />
-        <span>Background</span>
+        <Text size="2">Background</Text>
       </Flex>
       </div>
       <div id="preview-preferences" className="h-full w-[150px] grid grid-rows-2 p-2 rounded-lg shadow-md bg-slate-50">
@@ -52,9 +52,9 @@ export default function Dock() {
         <Text>
           <Flex gap="2" align="center">
             <button onClick={() => setPreferences({...dPreferences, fontSize: dPreferences.fontSize - 1})} style={{lineHeight: 0}}>
-            <span className="material-symbols-outlined text-md">
+            <Text className="material-symbols-outlined" size="2">
             text_decrease
-            </span>
+            </Text>
             </button>
             <TextField.Root>
            <TextField.Input placeholder="font size" value={dPreferences.fontSize} onChange={(e) => {
@@ -65,9 +65,9 @@ export default function Dock() {
             }} />
           </TextField.Root>
            <button onClick={() => setPreferences({...dPreferences, fontSize: dPreferences.fontSize + 1})} style={{lineHeight: 0}}>
-            <span className="material-symbols-outlined text-md">
+            <Text className="material-symbols-outlined" size="2">
             text_increase 
-            </span>
+            </Text>
             </button>
           </Flex>
         </Text>
