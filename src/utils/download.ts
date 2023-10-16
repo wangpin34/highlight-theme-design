@@ -12,6 +12,7 @@ export function downloadText(text: string, {filename, type}:{filename?: string, 
   URL.revokeObjectURL(url);
 }
 
+
 export function downloadHljs(theme: Theme) {
   const hljs = `
       .hljs {

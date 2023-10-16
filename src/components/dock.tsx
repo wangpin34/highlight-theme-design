@@ -1,7 +1,7 @@
 
-import { Text, Switch, Flex, TextField} from '@radix-ui/themes'
+import { Text, Switch, Flex, TextField, DropdownMenu, Button} from '@radix-ui/themes'
 import ColorPicker from 'components/color-picker'
-import { downloadHljs } from 'utils/download'
+import { downloadHljs, downloadText } from 'utils/download'
 import { themeState } from 'states/theme'
 import { useCallback} from 'react'
 import { modeState, Mode } from 'states/action'
@@ -23,11 +23,15 @@ export default function Dock() {
   const onToggle = useCallback(() => {
       setMode(mode === Mode.Design ? Mode.Edit : Mode.Design)
   }, [setMode, mode])
-  const onDownload = useRecoilCallback(({snapshot}) => async () => {
+  const onExportHljs = useRecoilCallback(({snapshot}) => async () => {
     const theme = snapshot.getLoadable(themeState).getValue()
     downloadHljs(theme)
   }, [])
-  return <div className="fixed bottom-0 w-full flex justify-center">
+  const onExportThemeJSON = useRecoilCallback(({snapshot}) => async () => {
+    const theme = snapshot.getLoadable(themeState).getValue()
+    downloadText(JSON.stringify(theme, null, 2), {filename: 'code-theme.json', type: 'text/json'})
+  }, [])
+  return <div className="fixed bottom-8 w-full flex justify-center">
     <div className="w-min-fit p-4 flex gap-4 justify-center items-center bg-slate-100 rounded-xl shadow-xl ">
     <div id="theme-root-properties" className="flex flex-col justify-center h-full w-min-fit p-2 rounded-lg shadow-md bg-slate-50">
       <Flex >
@@ -68,7 +72,20 @@ export default function Dock() {
           </Flex>
         </Text>
       </div>
-      <div id="actions" className="w-min-[100px] p-2 rounded-lg shadow-md bg-slate-50">
+      <div id="actions" className="w-min-fit h-full p-2 rounded-lg shadow-md bg-slate-50">
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Button variant='surface'>Export</Button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item onClick={onExportHljs}>
+              Export Highlight CSS
+            </DropdownMenu.Item>
+            <DropdownMenu.Item onClick={onExportThemeJSON}>
+              Export Theme as JSON
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </div>
   </div>
   </div>
