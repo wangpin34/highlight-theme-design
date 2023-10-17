@@ -1,0 +1,4 @@
+.dock {
+  background: var(--color-background);
+  outline: 4px solid var(--color-panel-translucent);
+}
