@@ -1,13 +1,13 @@
-import { Text, Flex, Box, IconButton } from '@radix-ui/themes'
-import { SunIcon, MoonIcon } from '@radix-ui/react-icons'
-import { useCallback, useEffect } from 'react'
-import logo from 'assets/logo.svg'
+import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
+import { Box, Flex, IconButton, Text } from '@radix-ui/themes'
 import logoWhite from 'assets/logo-white.svg'
-import githubWhite from './github-mark-white.svg'
-import github from './github-mark.svg'
+import logo from 'assets/logo.svg'
 import classnames from 'classnames'
+import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { darkState } from 'states/site-preferences'
+import githubWhite from './github-mark-white.svg'
+import github from './github-mark.svg'
 import styles from './index.module.css'
 
 export default function Header() {
@@ -31,7 +31,7 @@ export default function Header() {
         <Text size="3">CodeTheme Designer</Text>
       </Flex>
       <Flex gap="2" align="center" justify="end" grow="1">
-        <IconButton onClick={onToggleTheme} variant="soft">
+        <IconButton onClick={onToggleTheme} variant="ghost">
           {dark ? <MoonIcon width="18" height="18" /> : <SunIcon width="18" height="18" />}
         </IconButton>
         <a href="https://github.com/wangpin34/highlight-theme-design">
