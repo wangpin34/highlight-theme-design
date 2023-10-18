@@ -20,21 +20,25 @@ export default function ItemDesign() {
       }
     }
   }, [showColorPicker])
-  return item ? (
-    <Box className="flex justify-center items-center" onClick={(e) => e.stopPropagation()}>
-      <Box className={classnames('min-w-min min-h-min p-2 rounded-md shadow-2xl', styles.design)}>
+
+  return (
+    <Box className="absolute top-0 right-0 w-[120px] h-full flex items-center justify-center">
+      <Box
+        className={classnames(`w-[100px] h-[80px] p-2 rounded-md shadow-2xl`, { 'opacity-0': !item }, styles.design)}
+        onClick={(e) => e.stopPropagation()}
+      >
         <Box className={classnames('px-2 border-b-2 border-solid border-slate-200')}>
           <Text className="capitalize" size="3">
-            {item.key}
+            {item?.key ?? ''}
           </Text>
         </Box>
         <Box className="flex pt-2 gap-2 items-center px-2">
-          <ColorPicker color={item.color} onChange={(color) => setItem({ ...item, color })} />
+          <ColorPicker color={item?.color ?? '#000'} onChange={(color) => item && setItem({ ...item, color })} />
           <Text className="capitalize" size="2">
             Color
           </Text>
         </Box>
       </Box>
     </Box>
-  ) : null
+  )
 }
