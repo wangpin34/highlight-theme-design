@@ -1,4 +1,4 @@
-import { atom, selector, DefaultValue } from 'recoil'
+import { DefaultValue, atom, selector } from 'recoil'
 import { Preferences } from 'types/site-preferences'
 import { getSitePreferences } from 'utils/storage'
 

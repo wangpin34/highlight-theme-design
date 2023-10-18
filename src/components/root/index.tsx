@@ -4,10 +4,12 @@ import Dock from 'components/dock'
 import Header from 'components/header'
 import ItemDesign from 'components/item-design'
 import { darken } from 'polished'
-import { useMemo } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useEffect, useMemo } from 'react'
+import { useRecoilCallback, useRecoilValue } from 'recoil'
 import { designPreferencesState } from 'states/design-preferences'
+import { preferencesState as sitePreferencesState } from 'states/site-preferences'
 import { themeState } from 'states/theme'
+import { setSitePreferences, setTheme } from 'utils/storage'
 
 export default function Root() {
   const theme = useRecoilValue(themeState)
@@ -20,6 +22,17 @@ export default function Root() {
     }),
     [theme, preferences]
   )
+  const persitState = useRecoilCallback(({ snapshot }) => async () => {
+    const theme = await snapshot.getPromise(themeState)
+    const sitePreferences = await snapshot.getPromise(sitePreferencesState)
+    setTheme(theme)
+    setSitePreferences(sitePreferences)
+  })
+  useEffect(() => {
+    window.addEventListener('unload', () => {
+      persitState()
+    })
+  })
   return (
     <Box className="w-full h-full pt-[64px] mx-auto">
       <Header />

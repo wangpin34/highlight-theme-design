@@ -3,7 +3,7 @@ import type { Preferences } from 'types/site-preferences'
 import type { Theme } from 'types/theme'
 import * as yup from 'yup'
 
-const sitePreferencesSchema = yup.object().shape({
+const sitePreferencesScheme = yup.object().shape({
   dark: yup.boolean(),
 })
 
@@ -18,7 +18,7 @@ export function getSitePreferences() {
   const pStr = localStorage.getItem(`${PREFIX}.${SITE_PREFERENCES}`)
   if (pStr) {
     const preferences = JSON.parse(pStr)
-    if (sitePreferencesSchema.isValidSync(preferences)) {
+    if (sitePreferencesScheme.isValidSync(preferences)) {
       return preferences as Preferences
     }
   }
@@ -77,22 +77,34 @@ const THEME = 'theme'
 const themeScheme = yup.object().shape({
   backgroundColor: yup.string().required(),
   color: yup.string().required(),
-  items: yup.array().of(
-    yup.object().shape({
-      key: yup.string().required(),
-      type: yup.string().oneOf(['language', 'general']),
-      color: yup.string().required(),
-    })
-  ),
+  items: yup.object(),
 })
+
+const itemScheme = yup.object().shape({
+  key: yup.string().required(),
+  type: yup.string().oneOf(['language', 'general']),
+  color: yup.string().required(),
+})
+
 const defaultTheme: Theme = { backgroundColor: '#fff', color: '#1a2a3a', items: {} }
 export function getTheme() {
   const themeStr = localStorage.getItem(`${PREFIX}.${THEME}`)
   if (themeStr) {
     const theme = JSON.parse(themeStr)
     if (themeScheme.isValidSync(theme)) {
-      return theme as Theme
+      const themeObj = theme as Theme
+      if (themeObj.items?.length) {
+        const item = themeObj.items[0]
+        if (itemScheme.isValidSync(item)) {
+          return themeObj
+        }
+      }
+      return themeObj
     }
   }
   return defaultTheme
+}
+
+export function setTheme(theme: Theme) {
+  localStorage.setItem(`${PREFIX}.${THEME}`, JSON.stringify(theme))
 }
