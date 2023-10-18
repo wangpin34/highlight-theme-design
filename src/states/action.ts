@@ -2,12 +2,12 @@ import { atom, selector } from 'recoil'
 
 export enum Mode {
   Design = 'design',
-  Edit = 'edit'
+  Edit = 'edit',
 }
 
 export const modeState = atom({
   key: 'modeState',
-  default: Mode.Design
+  default: Mode.Design,
 })
 
 export const isEditModeState = selector({
@@ -16,4 +16,9 @@ export const isEditModeState = selector({
     const modeStateValue = get(modeState)
     return modeStateValue === Mode.Edit
   },
+})
+
+export const showTokensState = atom({
+  key: 'showTokensState',
+  default: false,
 })

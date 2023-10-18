@@ -1,16 +1,17 @@
-import { Text, Box, Switch, Flex, TextField, DropdownMenu, Button } from '@radix-ui/themes'
-import ColorPicker from 'components/color-picker'
-import { downloadHljs, downloadText } from 'utils/download'
-import { themeState } from 'states/theme'
-import { useCallback } from 'react'
-import { modeState, Mode } from 'states/action'
-import { designPreferencesState } from 'states/design-preferences'
-import { useRecoilCallback, useRecoilState } from 'recoil'
+import { Box, Button, DropdownMenu, Flex, Switch, Text, TextField } from '@radix-ui/themes'
 import classnames from 'classnames'
+import ColorPicker from 'components/color-picker'
+import { useCallback } from 'react'
+import { useRecoilCallback, useRecoilState } from 'recoil'
+import { Mode, modeState, showTokensState } from 'states/action'
+import { designPreferencesState } from 'states/design-preferences'
+import { themeState } from 'states/theme'
+import { downloadHljs, downloadText } from 'utils/download'
 import styles from './dock.module.css'
 
 export default function Dock() {
   const [theme, setTheme] = useRecoilState(themeState)
+  const [showTokens, setShowTokens] = useRecoilState(showTokensState)
   const [dPreferences, setPreferences] = useRecoilState(designPreferencesState)
   const setThemeFontColor = useRecoilCallback(
     ({ snapshot }) =>
@@ -32,6 +33,9 @@ export default function Dock() {
   const onToggle = useCallback(() => {
     setMode(mode === Mode.Design ? Mode.Edit : Mode.Design)
   }, [setMode, mode])
+  const onToggleShowTokens = useCallback(() => {
+    setShowTokens((c) => !c)
+  }, [setShowTokens])
   const onExportHljs = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
@@ -61,10 +65,15 @@ export default function Dock() {
             <Text size="2">Background</Text>
           </Flex>
         </Box>
-        <Box id="preview-preferences" className="h-full w-[150px] grid grid-rows-2 p-2 rounded-lg shadow-md">
+        <Box id="preview-preferences" className="h-full w-[300px] grid grid-rows-2 grid-cols-2 items-center p-2 rounded-lg shadow-md">
           <Text as="label" size="2">
             <Flex gap="2">
               <Switch defaultChecked checked={mode === Mode.Edit} onClick={() => onToggle()} /> Edit Mode
+            </Flex>
+          </Text>
+          <Text as="label" size="2">
+            <Flex gap="2">
+              <Switch defaultChecked checked={showTokens} onClick={() => onToggleShowTokens()} /> Show Tokens
             </Flex>
           </Text>
           <Text>

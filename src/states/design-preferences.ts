@@ -7,6 +7,6 @@ export interface Preferences {
 export const designPreferencesState = atom<Preferences>({
   key: 'designPreferencesState',
   default: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 })

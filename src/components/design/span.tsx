@@ -1,11 +1,13 @@
 import classnames from 'classnames'
 import React, { useMemo } from 'react'
-import { useRecoilCallback } from 'recoil'
+import { useRecoilCallback, useRecoilValue } from 'recoil'
+import { showTokensState } from 'states/action'
 import { currentItemKeyState, currentItemState, themeState } from 'states/theme'
 import type { Item } from 'types/theme'
 import './index.css'
 
 function Span({ children, className }: { children: React.ReactNode; className?: string }) {
+  const showTokens = useRecoilValue(showTokensState)
   const multiChild = useMemo(() => children instanceof Array, [children])
   const metadata = useMemo<Pick<Item, 'key' | 'type'>>(() => {
     const segment = className
@@ -37,36 +39,27 @@ function Span({ children, className }: { children: React.ReactNode; className?: 
   const myChildren = useMemo(() => {
     return React.Children.map(children, (child) => {
       if (typeof child === 'string') {
-        return (
-          <span
-            className={classnames(
-              className,
-              'hover:outline-1 hover:outline-pink-600 hover:outline-dashed hover:outline-offset-2 cursor-pointer rounded'
-            )}
-            // data-category={category}
-            onClick={(e) => {
-              e.stopPropagation()
-              metadata.key !== 'unknown' && initialItemThemeIfNotFound(metadata.key, metadata.type)
-            }}
-          >
-            {child}
-          </span>
-        )
+        return <Span className={className}>{child}</Span>
       }
       return child
     })
-  }, [children, className, metadata, initialItemThemeIfNotFound])
+  }, [children, className])
 
   if (!multiChild) {
     return (
       <span
         className={classnames(
           className,
-          'hover:outline-2 hover:outline-pink-600 hover:outline-dashed hover:outline-offset-2 cursor-pointer rounded-md'
+          'hover:outline-2 hover:outline-pink-600 hover:outline-dashed hover:outline-offset-4 cursor-pointer rounded-md',
+          {
+            'outline-2 outline-pink-600 outline outline-offset-1': metadata.key && showTokens,
+          }
         )}
         onClick={(e) => {
           e.stopPropagation()
-          metadata.key !== 'unknown' && initialItemThemeIfNotFound(metadata.key, metadata.type)
+          if (metadata.key && metadata.key !== 'unknown') {
+            initialItemThemeIfNotFound(metadata.key, metadata.type)
+          }
         }}
       >
         {children}
