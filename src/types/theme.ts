@@ -1,11 +1,11 @@
 export interface Item {
-  category: string
-  language?: string
+  key: string
+  type: 'general' | 'language'
   color: string
 }
 
 export interface Theme {
   backgroundColor: string
   color: string
-  items: Map<string, Item>
+  items: Record<string, Item>
 }

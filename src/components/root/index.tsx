@@ -1,13 +1,13 @@
-import { themeState } from 'states/theme'
-import { darken } from 'polished'
 import { Box } from '@radix-ui/themes'
-import { designPreferencesState } from 'states/design-preferences'
-import { useRecoilValue } from 'recoil'
-import { useMemo } from 'react'
-import Dock from 'components/dock'
 import Design from 'components/design'
+import Dock from 'components/dock'
 import Header from 'components/header'
 import ItemDesign from 'components/item-design'
+import { darken } from 'polished'
+import { useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
+import { designPreferencesState } from 'states/design-preferences'
+import { themeState } from 'states/theme'
 
 export default function Root() {
   const theme = useRecoilValue(themeState)
@@ -23,15 +23,12 @@ export default function Root() {
   return (
     <Box className="w-full h-full pt-[64px] mx-auto">
       <Header />
-      <Box
-        className="w-full h-full"
-        style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', ...style }}
-      >
+      <Box className="w-full h-full" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', ...style }}>
         <Box></Box>
         <div className="h-full flex items-center">
-           <div className="p-8 rounded-2xl" style={{backgroundColor: darken(0.2, theme.backgroundColor)}}>
-              <Design />
-           </div>
+          <div className="p-8 rounded-2xl" style={{ backgroundColor: darken(0.2, theme.backgroundColor) }}>
+            <Design />
+          </div>
         </div>
         <ItemDesign />
       </Box>

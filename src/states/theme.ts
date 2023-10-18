@@ -1,9 +1,10 @@
 import { DefaultValue, atom, selector } from 'recoil'
 import type { Item, Theme } from 'types/theme'
+import { getTheme } from 'utils/storage'
 
 export const themeState = atom<Theme>({
   key: 'themeState',
-  default: { backgroundColor: '#fff', color: '#1a2a3a', items: new Map() },
+  default: getTheme(),
 })
 
 export const baseState = selector<Omit<Theme, 'items'>>({
@@ -43,7 +44,7 @@ export const currentItemState = selector<Item | null>({
     const key = get(currentItemKeyState)
     const theme = get(themeState)
     if (key !== null) {
-      return theme.items.get(key) ?? { category: key, color: theme.color }
+      return theme.items[key]
     }
     return null
   },
@@ -56,11 +57,11 @@ export const currentItemState = selector<Item | null>({
       // ignore
     } else {
       const theme = get(themeState)
-      const items = new Map(theme.items)
-      items.set(newValue.category, newValue)
+      const items = { ...theme.items }
+      items[newValue.key] = { ...newValue }
       set(themeState, {
         ...theme,
-        items,
+        items: { ...items },
       })
     }
   },
